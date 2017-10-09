@@ -4,7 +4,7 @@
   height: 99vh;
 }
 
-.friends {
+.friends_container {
   position: absolute;
   text-align: right;
   right: 5px;
@@ -13,9 +13,62 @@
   overflow: hidden;
   max-width: 20vw;
   bottom: 40px;
-  font-size: 45px;
-  .friend {
-    border-bottom: solid thin black;
+  .tab {
+    margin-top: 5px;
+    clear: both;
+    height: 30px;
+    margin-bottom: -2px;
+    .select {
+      &:hover {
+        color: orange;
+        &.selected {
+          color: black;
+          cursor: default;
+        }
+      }
+      &.left {
+        float: left;
+      }
+      &.right {
+        float: right;
+      }
+      &.selected {
+        background-color: white;
+        opacity: 1;
+      }
+      opacity: 0.4;
+      min-width: 46.5%;
+      font-size: 24px;
+      cursor: pointer;
+      text-align: center;
+      flex-grow: 1;
+      border: solid 1px black;
+      border-bottom: none;
+    }
+  }
+  .friends {
+    border: solid 1px black;
+    min-height: 85vh;
+    .friend {
+      display: flex;
+      >div {
+        height: 50px;
+      }
+      .name {
+        font-size: 18px;
+        flex-grow: 8;
+        padding-right: 15px;
+        line-height: 55px;
+      }
+      .distance {
+        line-height: 60px;
+        padding-left: 10px;
+        text-align: left;
+        flex-grow: 2;
+        font-size: 16px;
+      }
+      border-bottom: solid 1px #cfcfcf;
+    }
   }
 }
 
@@ -38,11 +91,12 @@
   top: 1px;
   width: 75vw;
   height: 99vh;
-  border: thin solid black;
+  border: solid 1px black;
   .chatline {
     font-size: 20px;
     .name {
-      font-weight: bold
+      font-weight: bold;
+      color: navy;
     }
     .text {
       
