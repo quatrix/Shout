@@ -57,6 +57,12 @@ export default class _Chat extends TrackerReact(Component) {
       location: Geolocation.latLng(),
     })
     data.target.value = ""
+    this.scrollDown()
+  }
+
+  scrollDown() {
+    this.chat_end.scrollIntoView({ behavior: "smooth" })
+    $('.chat_container')[0].scrollTop+=50
   }
 
   keypress(event) {
@@ -69,7 +75,10 @@ export default class _Chat extends TrackerReact(Component) {
       return <Chatline key={i} data={line} />
     })
     return ( <div className='main_container'>
-      <div className='chat_container'> {chat_lines} </div>
+      <div className='chat_container'> 
+        {chat_lines}
+        <div className='chat_end' ref={(el) => {this.chat_end = el}}> </div>
+      </div>
       <div className='input_container'>
         <input onKeyPress={this.keypress.bind(this)} onBlur={this.send.bind(this)} type='text' />
       </div>

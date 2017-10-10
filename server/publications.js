@@ -14,7 +14,6 @@ const now = () => {
 }
 
 Meteor.startup(() => {
-  Chat.remove({})
   Chat._ensureIndex({ 
     "ts": 1 
   }, { 
