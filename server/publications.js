@@ -13,24 +13,12 @@ const now = () => {
   return new Date().valueOf()
 }
 
-this.time_passed = () => {
-  return {
-    "$or": [
-      {ts: { 
-        "$lt": (now()-50),
-      }},
-      {ts: { 
-        "$exists": false
-      }}
-    ]
-  }
-}
-
 Meteor.startup(() => {
+  Chat.remove({})
   Chat._ensureIndex({ 
     "ts": 1 
   }, { 
-    expireAfterSeconds: 600 
+    expireAfterSeconds: 60000 
   })
 })
 
@@ -59,19 +47,46 @@ Meteor.methods({
   }
 })
 
+Meteor.methods({
+  'remove friend'(fid) {
+    let user_id = Meteor.user()._id
+    Friends.update(user_id, {
+      $pull: {
+        'friends': fid
+      }
+    })
+  },
+  'add friend'(fid) {
+    let user_id = Meteor.user()._id
+    Friends.update(user_id, {
+      $addToSet: {
+        'friends': fid
+      }
+    })
+  }
+})
+
 const updateCurrentLocation = (data) => {
 	let user = Meteor.user()
-  Friends.upsert({
-    name: user.username,
-    _id: user._id
-  }, {
-		"$set": {
-			"location": point(data)
-		}
-	})
+  if (Friends.findOne(user._id))
+    Friends.update({
+      _id: user._id
+    }, {
+      "$set": {
+        "location": point(data)
+      }
+    })
+  else
+    Friends.insert({
+      _id: user._id,
+      name: user.username,
+      "location": point(data),
+      friends: [],
+      state: '',
+    })
 }
 
-const locationQuery = (coords, distance=1000) => {
+const locationQuery = (coords, distance=2500) => {
   return {
     location: {
       $near: {
@@ -124,15 +139,21 @@ Meteor.publish({
 			}
     }
     let chat_query = locationQuery(data)
+    let all_lines = Chat.find(chat_query).fetch()
+    let new_lines = all_lines.filter((line) => {
+      return (line.ts < now() - 1000*600)
+    })
+    let lineIds = _.pluck(new_lines, '_id')
     let user = Meteor.user()
+    let me = Friends.findOne(user._id)
     let friends_query = {
       $or: [
-        {friends: {$in: [user._id]}},
+        {_id: {$in: me.friends}},
         {_id: user._id}
       ]
     }
     return [
-      Chat.find(chat_query),
+      Chat.find({_id: {$nin: lineIds}}),
       Friends.find(friends_query)
     ]
   },

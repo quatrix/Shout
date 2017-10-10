@@ -24,18 +24,20 @@ class Chatline extends TrackerReact(Component) {
 
   componentWillMount() {
     if (this.props.data.text.indexOf('@'+this.user().name) > -1) {
-      let a = new Notification('Alert!')
+      let a = new Notification(this.props.data.name, {
+        body: this.props.data.text
+      })
     }
   }
   render() {
-    let date = moment(this.props.data.ts)
+    let created = moment(this.props.data.ts)
     let distance = distanceBetween(
       latLng(this.user()), 
       this.location()
     )
     return(
       <div className='chatline'>  
-        <span className='time'> {date.format('HH:MM.SS')} </span>
+        <span className='time'> {created.format('HH:MM.SS')} </span>
         <span className='name'> &lt;{this.props.data.name}&gt;</span>
         <span className='text'> {this.props.data.text} </span>
       </div>
@@ -45,10 +47,11 @@ class Chatline extends TrackerReact(Component) {
 
 export default class _Chat extends TrackerReact(Component) {
   chat() {
-    return Chat.find().fetch()
+    return Chat.find({}).fetch()
   }
 
   send(data) {
+    if (data.target.value === "") return
     Meteor.call('say', {
       text: data.target.value,
       location: Geolocation.latLng(),
@@ -62,13 +65,11 @@ export default class _Chat extends TrackerReact(Component) {
   }
 
   render() {
-    let chat = this.chat().map((line, i) => {
-      return (
-          <Chatline key={i} data={line} />
-      )
+    let chat_lines = this.chat().map((line, i) => {
+      return <Chatline key={i} data={line} />
     })
     return ( <div className='main_container'>
-      <div className='chat_container'> {chat} </div>
+      <div className='chat_container'> {chat_lines} </div>
       <div className='input_container'>
         <input onKeyPress={this.keypress.bind(this)} onBlur={this.send.bind(this)} type='text' />
       </div>

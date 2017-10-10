@@ -7,7 +7,7 @@
 .friends_container {
   position: absolute;
   text-align: right;
-  right: 5px;
+  right: 20px;
   top: 1px;
   width: 20vw;
   overflow: hidden;
@@ -54,16 +54,28 @@
       >div {
         height: 50px;
       }
+      .addOrRemove {
+        cursor: pointer;
+        opacity: 0.5;
+        &:hover {
+          color: orange;
+          opacity: 1;
+        }
+        font-weight: bold;
+        font-size: 40px;
+        line-height: 55px;
+      }
       .name {
         font-size: 18px;
         flex-grow: 8;
-        padding-right: 15px;
+        padding-left: 15px;
         line-height: 55px;
+        text-align: left;
       }
       .distance {
         line-height: 60px;
-        padding-left: 10px;
-        text-align: left;
+        text-align: right;
+        padding-right: 10px;
         flex-grow: 2;
         font-size: 16px;
       }
@@ -74,9 +86,9 @@
 
 .input_container {
   position: absolute;
-  bottom: 3px;
+  bottom: 2vh;
   height: 40px;
-  left: 8px;
+  left: 12px;
   right: 24vw;
   input {
     width: 100%;
@@ -90,13 +102,14 @@
   left: 5px;
   top: 1px;
   width: 75vw;
-  height: 99vh;
+  height: 98vh;
   border: solid 1px black;
   .chatline {
     font-size: 20px;
     .name {
       font-weight: bold;
       color: navy;
+      font-size: 24px;
     }
     .text {
       

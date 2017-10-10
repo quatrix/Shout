@@ -14,19 +14,43 @@ class Friend extends Component {
     return latLng(this.props.data)
   }
 
+  remove_friend(friend_id) {
+    Meteor.call('remove friend', this.props.data._id)
+  }
+
+  add_friend(friend_id) {
+    Meteor.call('add friend', this.props.data._id)
+  }
+
+  removeFriend() {
+    return (
+      <div onClick={this.remove_friend.bind(this)} className='addOrRemove'>
+        -
+      </div>
+    )
+  }
+  addFriend() {
+    return (
+      <div onClick={this.add_friend.bind(this)} className='addOrRemove'>
+        +
+      </div>
+    )
+  }
+
   render() {
     let date = moment(this.props.data.ts)
+    let op = (this.props.friend) ? this.removeFriend() : this.addFriend()
     let distance = distanceBetween(
       this.user_location(), 
       this.location()
     )
-    console.log(distance)
     return (
       <div className='friend'> 
-        <div className='distance'> {distance}M </div>
         <div className='name'> 
           {this.props.data.name} 
         </div>
+        <div className='addOrRemove'> {op} </div>
+        <div className='distance'> {distance.toFixed(2)}M </div>
       </div>
     )
   }
@@ -48,13 +72,15 @@ export default class FriendsList extends TrackerReact(Component) {
     super()
   }
 
+  is_friend(friend) {
+    return (this._user.friends.indexOf(friend._id) > -1)
+  }
+
   friends() {
     const friends = Friends.find().fetch()
     if (this.state.show != 'all')
-      return friends.filter((friend) => {
-        return ((friend.friends) && (friend.friends.indexOf(this._user) > -1))
-      })
-    return Friends.find().fetch()
+      return friends.filter(this.is_friend.bind(this))
+    return friends
   }
 
   selectFriends() {
@@ -75,15 +101,19 @@ export default class FriendsList extends TrackerReact(Component) {
   }
 
   render() {
-    this._user = Friends.find(Meteor.user()._id).fetch()
+    this._user = Friends.find(Meteor.user()._id).fetch()[0]
     let left_tab_class = 'select left'
     let right_tab_class = 'select right'
     if (this.state.show === 'all')
       right_tab_class += ' selected'
     else
       left_tab_class += ' selected'
-    let friends = this.friends().map((friend) => {
-      return (<Friend key={friend.name} data={friend} />)
+    let friends = this.friends()
+    .filter((friend) => {
+      return (friend._id != Meteor.user()._id)
+    })
+    .map((friend) => {
+      return (<Friend key={friend.name} data={friend} friend={this.is_friend(friend)} />)
     })
     return (
       <div className='friends_container'>
