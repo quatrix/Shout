@@ -3,17 +3,17 @@
 .friends_container {
   position: absolute;
   text-align: right;
-  right: 20px;
-  top: 1px;
-  width: 20vw;
-  overflow: hidden;
-  max-width: 20vw;
-  bottom: 40px;
+  right: 1vw;
+  top: 1.5vh;
+  height: auto;
+  bottom: 1vh;
+  left: 77vw;
   .tab {
     margin-top: 5px;
     clear: both;
     height: 30px;
-    margin-bottom: -2px;
+		position: relative;
+		bottom: -1px;
     .select {
       &:hover {
         color: orange;
@@ -24,35 +24,65 @@
       }
       &.left {
         float: left;
+				background-color: #C5FEE6;
+        &.selected {
+					border-bottom-color: #C5FEE6;
+				}
       }
       &.right {
         float: right;
+				background-color: #D0F6FB;
+        &.selected {
+					border-bottom-color: #D0F6FB;
+				}
       }
-      &.selected {
-        background-color: white;
-        opacity: 1;
-      }
-      opacity: 0.4;
+			&.selected {
+				margin-top: -5px;
+				padding-top: 5px;
+				line-height: 30px;
+				font-weight: bold;
+			}
+			transition-duration: 0.25s;
+			position: relative;
+			height: 30px;
+      z-index: 2;
       min-width: 46.5%;
       font-size: 24px;
       cursor: pointer;
       text-align: center;
       flex-grow: 1;
       border: solid 1px black;
-      border-bottom: none;
+			border-bottom-color: none;
     }
   }
   .friends {
+    width: 21.75vw;
     border: solid 1px black;
-    min-height: 85vh;
+    overflow-y: scroll;
+    padding-top: 1vh;
+		&.all {
+			background-color: #D0F6FB;
+		}
+		&.just_friends {
+      background-color: #C5FEE6;
+    }
+    height: 90vh;
+    max-height: 90vh;
     .friend {
       display: flex;
+      height: 50px;
       >div {
         height: 50px;
       }
+			.marker {
+				font-size: 30px;
+				padding-left: 10px;
+				line-height: 65px;
+				color: green;
+			}
       .addOrRemove {
         cursor: pointer;
-        opacity: 0.5;
+        opacity: 0.75;
         &:hover {
           color: orange;
           opacity: 1;
@@ -80,6 +110,17 @@
   }
 }
 
+#render-target {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url(/test.png);
+  background-position: -15vw;
+  background-size: cover;
+}
+
 body {
   overflow: hidden;
 }
@@ -92,7 +133,9 @@ body {
   top: 2vh;
   width: 75vw;
   bottom: 2vh;
+	background-color: rgba(255, 255, 255, 0.5);
   .input_container {
+		background-color: rgba(255, 255, 255, 0.5);
     position: absolute;
     bottom: 0;
     height: 5.5vh;
@@ -105,6 +148,7 @@ body {
     }
   }
   .chat_container {
+    background-color: rgba(255, 255, 255, 0.75);
     overflow-y: scroll;
     position: absolute;
     top: 0;

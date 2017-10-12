@@ -72,7 +72,8 @@ const updateCurrentLocation = (data) => {
       _id: user._id
     }, {
       "$set": {
-        "location": point(data)
+        "location": point(data),
+        "ts": new Date(),
       }
     })
   else

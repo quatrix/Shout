@@ -38,14 +38,20 @@ class Friend extends Component {
   }
 
   render() {
+    let online_marker = null
     let date = moment(this.props.data.ts)
+    let now = moment()
+    now.subtract(5, 'minutes')
+    if (this.props.friend && date > now) 
+      online_marker = <div className="marker">*</div>
     let op = (this.props.friend) ? this.removeFriend() : this.addFriend()
     let distance = distanceBetween(
       this.user_location(), 
       this.location()
     )
     return (
-      <div className='friend'> 
+      <div className='friend animated fadeIn'> 
+        {online_marker}
         <div className='name'> 
           {this.props.data.name} 
         </div>
@@ -104,10 +110,13 @@ export default class FriendsList extends TrackerReact(Component) {
     this._user = Friends.find(Meteor.user()._id).fetch()[0]
     let left_tab_class = 'select left'
     let right_tab_class = 'select right'
-    if (this.state.show === 'all')
+    let mode = 'just_friends'
+    if (this.state.show === 'all') {
       right_tab_class += ' selected'
-    else
+      mode = 'all' 
+    } else {
       left_tab_class += ' selected'
+    }
     let friends = this.friends()
     .filter((friend) => {
       return (friend._id != Meteor.user()._id)
@@ -121,7 +130,7 @@ export default class FriendsList extends TrackerReact(Component) {
           <div className={left_tab_class} onClick={this.selectFriends.bind(this)}> Friends </div>
           <div className={right_tab_class} onClick={this.selectAll.bind(this)}> All </div>
         </div>
-        <div className='friends'> 
+        <div className={'friends '+mode}>
           {friends} 
         </div>
       </div>

@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import TrackerReact from 'meteor/ultimatejs:tracker-react'
 import {Chat, Friends} from '../../collections'
 import {moment} from 'meteor/rzymek:moment'
-import X from 'meteor/oaf:html5-desktop-notifications'
-console.log(X)
 
 this.Friends = Friends
 this.Chat = Chat
