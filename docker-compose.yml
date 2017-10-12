@@ -1,0 +1,12 @@
+app:
+    build: .
+    command: start
+    ports:
+        - "3000:3000"
+    links:
+        - database
+    environment:
+    - MONGO_URL=mongodb://database:27017/meteor
+database:
+  image: mongo:latest
+  command: mongod --smallfiles --quiet --logpath=/dev/null
